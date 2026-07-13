@@ -282,51 +282,68 @@ async def obtener_productos_recomendados(limit: int = 10):
 
 @app.get("/productos/recientes")
 async def obtener_productos_recientes(limit: int = 4):
-    """Obtiene los productos más recientes (ordenados por ID descendente)"""
+    """Obtiene los productos más recientemente COMPRADOS por los usuarios"""
     try:
-        logger.info(f"Solicitando {limit} productos recientes")
+        logger.info(f"Solicitando {limit} productos recientemente comprados")
         
-        query = """
-        SELECT 
-            p.id,
-            p.nombre,
-            p.precio,
-            p.marcas,
-            p.dieta,
-            p.url_imagen,
-            p.categoria_id,
-            p.stock,
-            c.nombre AS categoria_nombre
-        FROM productos p
-        LEFT JOIN categorias c ON p.categoria_id = c.id
-        WHERE p.activo = TRUE
-        ORDER BY p.id DESC
-        LIMIT %s
-        """
+        # 1. Buscar las últimas compras en la base de datos
+        query_compras = "SELECT items FROM compras WHERE items IS NOT NULL ORDER BY fecha_compra DESC LIMIT 20"
+        compras_db = db.execute_query(query_compras)
         
-        productos_db = db.execute_query(query, (limit,))
+        productos_ids = []
+        if compras_db:
+            for row in compras_db:
+                items = row.get('items', [])
+                if isinstance(items, str):
+                    import json
+                    try: items = json.loads(items)
+                    except: continue
+                
+                # Extraer los IDs sin repetir
+                for item in items:
+                    pid = item.get('producto_id')
+                    if pid and pid not in productos_ids:
+                        productos_ids.append(int(pid))
+                    if len(productos_ids) >= limit: break
+                if len(productos_ids) >= limit: break
+        
+        # 2. Fallback: Si nadie ha comprado nada aún, mostrar los últimos del catálogo
+        if not productos_ids:
+            query_fallback = """
+            SELECT p.id, p.nombre, p.precio, p.marcas, p.dieta, p.url_imagen, p.categoria_id, p.stock, c.nombre AS categoria_nombre
+            FROM productos p LEFT JOIN categorias c ON p.categoria_id = c.id
+            WHERE p.activo = TRUE ORDER BY p.id DESC LIMIT %s
+            """
+            productos_db = db.execute_query(query_fallback, (limit,))
+        else:
+            # 3. Traer los datos exactos de los productos que sí fueron comprados
+            format_strings = ','.join(['%s'] * len(productos_ids))
+            query_productos = f"""
+            SELECT p.id, p.nombre, p.precio, p.marcas, p.dieta, p.url_imagen, p.categoria_id, p.stock, c.nombre AS categoria_nombre
+            FROM productos p LEFT JOIN categorias c ON p.categoria_id = c.id
+            WHERE p.id IN ({format_strings})
+            """
+            productos_db = db.execute_query(query_productos, tuple(productos_ids))
         
         if not productos_db:
             return {"productos": []}
             
-        # Convertir a lista de diccionarios y formatear
+        # Normalizar los datos para enviarlos al frontend
         productos_formateados = []
         for p in productos_db:
             pd = dict(p)
-            if pd.get('precio') is not None:
-                pd['precio'] = float(pd['precio'])
+            if pd.get('precio') is not None: pd['precio'] = float(pd['precio'])
             marca_val = pd.get('marcas') or pd.get('marca')
             pd['marca'] = marca_val
             pd['marcas'] = marca_val
             pd['categoria'] = pd.get('categoria_nombre') or 'General'
             productos_formateados.append(pd)
             
-        return {"productos": productos_formateados}
+        return {"productos": productos_formateados[:limit]}
         
     except Exception as e:
-        logger.error(f"Error obteniendo productos recientes: {e}")
-        raise HTTPException(status_code=500, detail=f"Error obteniendo productos recientes: {str(e)}")
-
+        logger.error(f"Error obteniendo productos recientes comprados: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/productos/{producto_id}")
 async def obtener_producto(producto_id: int):

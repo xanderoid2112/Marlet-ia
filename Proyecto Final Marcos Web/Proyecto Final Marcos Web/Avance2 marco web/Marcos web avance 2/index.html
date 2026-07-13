@@ -269,10 +269,11 @@
                     const data = await response.json();
 
                     // Normalizar datos
-                    const recentProducts = Array.isArray(data) ? data : (data.productos || []);
+                  const recentProducts = Array.isArray(data) ? data : (data.productos || []);
 
-                    container.innerHTML = ''; // Limpiar spinner
+                 allProducts = recentProducts; // ¡ESTA LÍNEA ES VITAL PARA QUE FUNCIONE EL CARRITO!
 
+                   container.innerHTML = ''; // Limpiar spinner
                     if (recentProducts.length === 0) {
                         container.innerHTML = '<div class="col-12 text-center"><p class="text-muted">No hay productos destacados disponibles.</p></div>';
                         return;

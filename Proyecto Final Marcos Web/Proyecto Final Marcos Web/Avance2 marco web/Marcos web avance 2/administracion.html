@@ -347,15 +347,16 @@
 
                         </div>
                         <div class="form-row">
-                            <div class="form-group">
-                                <label for="product-diet">Dieta</label>
-                                <select id="product-diet">
-                                    <option value="">Seleccione...</option>
-                                    <option value="vegano">Vegano</option>
-                                    <option value="vegetariana">Vegetariana</option>
-                                    <option value="sin_gluten">Sin Gluten</option>
-                                </select>
-                            </div>
+                          <div class="form-group">
+    <label>Dietas (Puedes marcar varias)</label>
+    <div id="product-diet-group" style="display: flex; gap: 15px; flex-wrap: wrap; padding-top: 8px;">
+        <label style="cursor: pointer;"><input type="checkbox" value="vegano" class="diet-checkbox"> Vegano</label>
+        <label style="cursor: pointer;"><input type="checkbox" value="vegetariana" class="diet-checkbox"> Vegetariana</label>
+        <label style="cursor: pointer;"><input type="checkbox" value="sin_gluten" class="diet-checkbox"> Sin Gluten</label>
+        <label style="cursor: pointer;"><input type="checkbox" value="carnivoro" class="diet-checkbox"> Carnívoro</label>
+        <label style="cursor: pointer;"><input type="checkbox" value="integral" class="diet-checkbox"> Integral</label>
+    </div>
+</div>
                             <div class="form-group">
                                 <label for="product-material">Información Nutricional/Composición</label>
                                 <input type="text" id="product-material"

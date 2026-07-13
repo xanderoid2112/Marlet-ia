@@ -255,6 +255,8 @@ window.handleSaveProduct = async function () {
     const categoria = document.getElementById('product-type').value;
     const marcas = document.getElementById('product-brand').value;
     const imagen = document.getElementById('product-image').value;
+   const checkboxes = document.querySelectorAll('.diet-checkbox:checked');
+    const dieta = Array.from(checkboxes).map(cb => cb.value).join(',') || null;
     const id = document.getElementById('product-id').value;
 
     // Validaciones básicas
@@ -269,7 +271,9 @@ window.handleSaveProduct = async function () {
         stock: parseInt(stock) || 0,
         categoria_id: parseInt(categoria),
         marcas: marcas || null,
-        url_imagen: imagen || null
+        url_imagen: imagen || null,
+        // 👇 NUEVO: Añadirlo al paquete que se envía a la base de datos
+        dieta: dieta || null 
     };
 
     try {
@@ -312,13 +316,21 @@ window.editProduct = function (id) {
     document.getElementById('product-type').value = product.categoria_id || '';
     document.getElementById('product-brand').value = product.marcas || '';
     document.getElementById('product-image').value = product.url_imagen || '';
+   document.querySelectorAll('.diet-checkbox').forEach(cb => cb.checked = false); 
+    if (product.dieta) {
+        const dietasGuardadas = product.dieta.split(',').map(d => d.trim());
+        document.querySelectorAll('.diet-checkbox').forEach(cb => {
+            if (dietasGuardadas.includes(cb.value)) {
+                cb.checked = true;
+            }
+        });
+    }
 
     document.getElementById('form-title').textContent = 'Editar Producto';
 
     // Scroll al formulario
     document.getElementById('product-form').scrollIntoView({ behavior: 'smooth' });
 };
-
 window.deleteProduct = async function (id) {
     if (!confirm('¿Estás seguro de eliminar este producto?')) return;
 
