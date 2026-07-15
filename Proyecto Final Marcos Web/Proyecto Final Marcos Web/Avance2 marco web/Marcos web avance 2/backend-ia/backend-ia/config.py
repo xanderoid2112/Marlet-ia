@@ -8,7 +8,7 @@ load_dotenv(dotenv_path=env_path)
 
 class Config:
     DATABASE_URL = os.getenv("DATABASE_URL")
-    SPRING_BOOT_URL = os.getenv("SPRING_BOOT_URL", "http://localhost:8080/api")
+    SPRING_BOOT_URL = os.getenv("SPRING_BOOT_URL", "https://marlet-ia-production.up.railway.app/api")
     MODEL_PATH = os.getenv("MODEL_PATH", "./models/lightfm_model.pkl")
     
 class DevelopmentConfig(Config):

@@ -15,7 +15,7 @@ $body = @{
 } | ConvertTo-Json
 
 try {
-    $result = Invoke-RestMethod -Uri "http://localhost:8080/api/canastas/generar" -Method POST -Body $body -ContentType "application/json" -TimeoutSec 30
+    $result = Invoke-RestMethod -Uri "https://marlet-ia-production.up.railway.app/api/canastas/generar" -Method POST -Body $body -ContentType "application/json" -TimeoutSec 30
 
     Write-Host "`n   ✅ CANASTA VEGANA GENERADA!" -ForegroundColor Green
     Write-Host "   🥬 Productos veganos: $($result.productos.Count)" -ForegroundColor White
