@@ -28,7 +28,7 @@ async function loadProductsFromAPI() {
         console.log('🔄 Cargando productos desde API...');
 
         // Cargar todos los productos desde el endpoint dedicado
-        const response = await fetch('http://localhost:3000/productos', {
+        const response = await fetch('https://marlet-ia.onrender.com/productos', {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -109,7 +109,7 @@ async function loadProductsFromAPI() {
 async function loadCategoriesFromAPI() {
     try {
         console.log('🔄 Cargando categorías desde API...');
-        const response = await fetch('http://localhost:3000/categorias');
+        const response = await fetch('https://marlet-ia.onrender.com/categorias');
 
         if (!response.ok) {
             throw new Error(`Error ${response.status}: ${response.statusText}`);

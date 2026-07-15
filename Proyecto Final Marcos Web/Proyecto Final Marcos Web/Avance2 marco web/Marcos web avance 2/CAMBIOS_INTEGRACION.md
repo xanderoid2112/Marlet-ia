@@ -12,13 +12,13 @@ cd "Avance2 marco web\Marcos web avance 2\backend-ia\backend-ia"
 python main.py
 ```
 
-El backend se ejecutará en: `http://localhost:3000`
+El backend se ejecutará en: `https://marlet-ia.onrender.com`
 
 ### Verificar que el Backend está Corriendo
 
 ```bash
 # Verificar salud del servicio
-curl http://localhost:3000/health
+curl https://marlet-ia.onrender.com/health
 ```
 
 Debería retornar:
@@ -200,7 +200,7 @@ CREATE TABLE categorias (
 
 ## Notas Importantes
 
-- El backend debe estar corriendo en `http://localhost:3000` para que el panel funcione
+- El backend debe estar corriendo en `https://marlet-ia.onrender.com` para que el panel funcione
 - Todas las operaciones CRUD ahora se realizan directamente contra PostgreSQL
 - Ya no se usa `localStorage` para categorías y productos
 - El slug de categorías se genera automáticamente a partir del nombre

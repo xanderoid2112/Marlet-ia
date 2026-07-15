@@ -1,5 +1,5 @@
-const API_BASE_URL = 'http://localhost:3000';
-const PYTHON_API_URL = 'http://localhost:3000';
+const API_BASE_URL = 'https://marlet-ia.onrender.com';
+const PYTHON_API_URL = 'https://marlet-ia.onrender.com';
 
 // Variables globales
 let productos = [];

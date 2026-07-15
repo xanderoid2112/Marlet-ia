@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ===========================================
     // CONFIGURACIÓN
     // ===========================================
-    const API_BASE_URL = 'http://localhost:3000';
+    const API_BASE_URL = 'https://marlet-ia.onrender.com';
     let canastaGenerada = [];
     let carritoPrincipal = JSON.parse(localStorage.getItem('aiMarketCart')) || [];
 

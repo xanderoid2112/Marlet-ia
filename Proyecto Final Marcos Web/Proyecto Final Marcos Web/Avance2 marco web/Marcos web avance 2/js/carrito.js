@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // CONFIGURACIÓN DE LA BASE DE DATOS
     // ===========================================
     // Usamos el backend local para seguridad
-    const API_URL = 'http://localhost:3000/guardar_compra';
+    const API_URL = 'https://marlet-ia.onrender.com/guardar_compra';
 
     // ===========================================
     // FUNCIONES PRINCIPALES
